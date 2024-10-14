@@ -1,10 +1,10 @@
 {
   "name": "whatsapp-customer-service",
   "version": "1.0.0",
-  "main": "src/app.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "dependencies": {
     "@hapi/boom": "^9.1.4",

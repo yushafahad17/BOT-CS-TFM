@@ -3,12 +3,12 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const mongoose = require('mongoose');
-const { connectToWhatsApp, sendMessageToOwner, sendMessageToGroup, downloadMediaMessage, getGroups } = require('./whatsapp');
-const authRoutes = require('./routes/auth');
-const chatRoutes = require('./routes/chat');
-require('./models/Access'); // Tambahkan ini
+const { connectToWhatsApp, sendMessageToOwner, sendMessageToGroup, downloadMediaMessage, getGroups } = require('./src/whatsapp');
+const authRoutes = require('./src/routes/auth');
+const chatRoutes = require('./src/routes/chat');
+require('./src/models/Access'); // Tambahkan ini
 const path = require('path');
-const messageHandler = require('./messageHandler');
+const messageHandler = require('./src/messageHandler');
 const fs = require('fs').promises;
 
 mongoose.set('strictQuery', false);
@@ -24,29 +24,27 @@ const io = socketIo(server, {
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 
 app.use('/auth', authRoutes);
 app.use('/chat', chatRoutes);
 
-app.get('/chat', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/chat.html'));
+app.get('/', (req, res) => {
+    console.log('Root route accessed');
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Tambahkan route fallback untuk SPA
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/index.html'));
+    res.sendFile(path.join(__dirname, 'public/index.html'));
 });
-
-app.use('/uploads', express.static(path.join(__dirname, '..', 'public', 'uploads')));
-
-messageHandler.setSocketIO(io);
 
 // Simpan riwayat chat untuk setiap user
 const chatHistory = new Map();
 
 // Pastikan folder uploads ada
-const uploadsDir = path.join(__dirname, '..', 'uploads');
+const uploadsDir = path.join(__dirname, 'uploads');
 fs.mkdir(uploadsDir, { recursive: true }).catch(console.error);
 
 io.on('connection', (socket) => {
@@ -128,7 +126,7 @@ module.exports = { sendMessageToUser };
 
 // Fungsi untuk menghapus gambar yang telah diproses setelah 1 jam
 async function cleanupProcessedImages() {
-    const directory = path.join(__dirname, '..', 'processed_images');
+    const directory = path.join(__dirname, 'processed_images');
     const files = await fs.readdir(directory);
     const now = Date.now();
     const oneHour = 60 * 60 * 1000;
