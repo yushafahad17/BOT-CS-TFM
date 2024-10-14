@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Therz File Manager - Customer Service</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f2f5;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+        }
+        #login-form, #chat-container {
+            padding: 20px;
+        }
+        #chat-container {
+            display: none;
+            height: 100vh;
+            max-height: 600px;
+            flex-direction: column;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #128C7E;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #128C7E;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0e7265;
+        }
+        #chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        .message {
+            max-width: 80%;
+            padding: 8px 12px;
+            margin-bottom: 10px;
+            border-radius: 18px;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+        .message.sent {
+            align-self: flex-end;
+            background-color: #DCF8C6;
+        }
+        .message.received {
+            align-self: flex-start;
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+        }
+        .message-input {
+            display: flex;
+            align-items: center;
+        }
+        #toggle-options {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        #options-container {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        .option-item {
+            display: block;
+            padding: 8px 12px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .option-item:hover {
+            background-color: #f0f0f0;
+        }
+        #emoji-picker-container {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            z-index: 1001;
+        }
+        .file-input {
+            display: none;
+        }
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 10px;
+        }
+        .emoji-button {
+            font-size: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+        #emoji-picker-container {
+            margin-top: 10px;
+        }
+        @media (max-width: 480px) {
+            .container {
+                height: 100vh;
+                max-height: none;
+                border-radius: 0;
+            }
+            #chat-container {
+                height: 100%;
+            }
+        }
+        .file-label {
+            cursor: pointer;
+            padding: 10px;
+            background-color: #128C7E;
+            color: white;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        .toggle-button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .toggle-button.active {
+            transform: rotate(180deg);
+        }
+        .file-label, .emoji-button {
+            display: block;
+            margin: 10px 0;
+            padding: 5px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #emoji-picker-container {
+            margin-top: 10px;
+        }
+        .message-input-container {
+            display: flex;
+            align-items: flex-end;
+            position: relative;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 8px;
+            margin-top: 10px;
+        }
+        .options-wrapper {
+            position: relative;
+            margin-right: 8px;
+        }
+        #message {
+            flex-grow: 1;
+            margin-right: 8px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            background-color: white;
+            min-height: 36px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        button[onclick="sendMessage()"] {
+            padding: 8px;
+            background-color: #128C7E;
+            color: white;
+            border: none;
+            border-radius: 50%; /* Membuat tombol bulat */
+            cursor: pointer;
+            font-size: 18px;
+            align-self: flex-end;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1;
+        }
+        button[onclick="sendMessage()"]:hover {
+            background-color: #075E54;
+        }
+        #options-container {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 1;
+        }
+        #toggle-options, #emoji-button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        #toggle-options {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px;
+        }
+        .input-hint {
+            display: block;
+            margin-top: 5px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+    <script src="https://unpkg.com/emoji-picker-element"></script>
+</head>
+<body>
+    <div class="container">
+        <div id="login-form">
+            <h1>Customer Service</h1>
+            <input type="text" id="username" placeholder="Silakan masukkan username/nama anda.">
+            <button onclick="login()">Mulai Chat</button>
+        </div>
+
+        <div id="chat-container">
+            <div id="chat-messages"></div>
+            <div id="image-preview"></div>
+            <div class="message-input-container">
+                <div class="options-wrapper">
+                    <button id="toggle-options" class="toggle-button">🔼</button>
+                    <div id="options-container" style="display: none;">
+                        <label for="file-input" class="option-item">📎 Upload File</label>
+                        <input type="file" id="file-input" class="file-input" accept="image/*">
+                        <button id="emoji-button" class="option-item">😊 Emoji</button>
+                    </div>
+                </div>
+                <textarea id="message" placeholder="Ketik pesan..." rows="1" inputmode="text" data-emoji-picker="true"></textarea>
+                <button onclick="sendMessage()" aria-label="Send message">➤</button>
+            </div>
+            <div id="emoji-picker-container" style="display: none;">
+                <emoji-picker></emoji-picker>
+            </div>
+            <button onclick="clearChat()" style="margin-top: 10px; margin-bottom: 5px;">Hapus Riwayat Obrolan</button>
+            <button onclick="logout()" style="margin-top: 5px; background-color: #d9534f;">Logout</button>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>

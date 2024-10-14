@@ -1,0 +1,150 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+#login-form, #chat-form {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color: #333;
+    text-align: center;
+}
+
+input[type="text"], textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    display: inline-block;
+    background-color: #5cb85c;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+button:hover {
+    background-color: #4cae4c;
+}
+
+#chat-history {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fff;
+}
+
+.user-message, .aether-message {
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 4px;
+    max-width: 80%;
+}
+
+.user-message {
+    background-color: #e6f3ff;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.aether-message {
+    background-color: #f0f0f0;
+    align-self: flex-start;
+}
+
+#typing-indicator {
+    font-style: italic;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+#status-message {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 10px;
+    display: none;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    
+    #login-form, #chat-form {
+        width: 100%;
+    }
+}
+
+#message-input-container {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#emoji-button, #upload-image-button {
+    font-size: 20px;
+    margin-right: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+#message {
+    flex-grow: 1;
+    margin-right: 5px;
+}
+
+.user-message, .aether-message {
+    max-width: 70%;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.user-message {
+    align-self: flex-end;
+    background-color: #dcf8c6;
+}
+
+.aether-message {
+    align-self: flex-start;
+    background-color: #ffffff;
+}
+
+#chat-history {
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.message-image {
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+}
