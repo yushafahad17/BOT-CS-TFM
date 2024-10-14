@@ -105,10 +105,16 @@ io.on('connection', (socket) => {
     });
 });
 
-const port = process.env.PORT || 3000;
-server.listen(port, () => {
+// Tambahkan ini di awal file, sebelum kode lainnya
+if (process.env.VERCEL) {
+  console.log('Running on Vercel...');
+  module.exports = app;
+} else {
+  const port = process.env.PORT || 3000;
+  server.listen(port, () => {
     console.log(`Server running on port ${port}`);
-});
+  });
+}
 
 connectToWhatsApp();
 
@@ -152,4 +158,18 @@ app.get('/groups', async (req, res) => {
         console.error('Error fetching groups:', error);
         res.status(500).json({ error: 'Failed to fetch groups' });
     }
+});
+
+console.log('Application starting...');
+console.log('Environment:', process.env.NODE_ENV);
+console.log('MONGODB_URI:', process.env.MONGODB_URI ? 'Set' : 'Not set');
+
+app.use((req, res, next) => {
+  console.log(`Request received: ${req.method} ${req.url}`);
+  next();
+});
+
+app.get('/api/test', (req, res) => {
+  console.log('Test endpoint accessed');
+  res.json({ message: 'Test endpoint working!' });
 });
