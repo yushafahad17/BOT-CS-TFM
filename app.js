@@ -30,10 +30,9 @@ app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 app.use('/auth', authRoutes);
 app.use('/chat', chatRoutes);
 
-// Tambahkan ini di awal file
 app.get('/', (req, res) => {
     console.log('Root route accessed');
-    res.send('Hello from Yaudah-mas!');
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Tambahkan route fallback untuk SPA
@@ -154,19 +153,3 @@ app.get('/groups', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch groups' });
     }
 });
-
-app.use((req, res, next) => {
-    console.log(`Request received: ${req.method} ${req.url}`);
-    next();
-});
-
-app.get('/test', (req, res) => {
-  res.send('Test endpoint working!');
-});
-
-app.use((err, req, res, next) => {
-  console.error('Error:', err);
-  res.status(500).send('Something went wrong!');
-});
-
-console.log('Application starting...');
