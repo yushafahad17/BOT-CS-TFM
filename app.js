@@ -163,3 +163,10 @@ app.use((req, res, next) => {
 app.get('/test', (req, res) => {
   res.send('Test endpoint working!');
 });
+
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(500).send('Something went wrong!');
+});
+
+console.log('Application starting...');
